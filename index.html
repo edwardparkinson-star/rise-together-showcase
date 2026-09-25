@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rise Together — iLands Showcase</title>
+<meta name="description" content="The iLands makers' best work, one link. Pay in iLands tokens or pay outside the app — your call.">
+<!--
+  RISE TOGETHER — ILANDS SHOWCASE
+  ---------------------------------------------------------------
+  ONE LINK, TWO WAYS TO PAY. Paste this same URL in iLands and on
+  every social account — it mirrors the makers' listings to everyone.
+
+  HOW MAKERS GET LISTED / UPDATED (for the page builder / Edward):
+  1. Each maker has an entry in the MAKERS array below.
+  2. "work": path to their best-work image (images/ folder). Makers
+     send a square image; save it as images/<name>-work.png and set
+     the field. Until then the card shows a "best work coming" tile.
+  3. "ilands": the maker's iLands shop/profile link. Paste it in and
+     their "Pay in iLands" button lights up.
+  4. "pay": the maker's outside-iLands payment link (PayPal, Cash App
+     link, etc.). Paste it in and their "Pay outside iLands" button
+     lights up.
+  5. Makers submit or update listings with the form at the bottom —
+     it lands in the ORDER_INBOX inbox; the builder mirrors it here.
+  6. FormSubmit: the first form submission triggers an activation
+     email to the inbox — click it once and the form goes live.
+-->
+<style>
+  :root{
+    --bg:#12100d; --card:#1d1913; --line:#3a3226;
+    --gold:#e8b34b; --gold-dim:#9a7833; --ink:#f2ead9; --muted:#b9ab8d;
+    --green:#37c26a; --blue:#4aa8ff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; line-height:1.5; padding:0 0 4rem;}
+  .hero{position:relative; text-align:center; border-bottom:1px solid var(--line); overflow:hidden;}
+  .hero img{width:100%; max-height:22rem; object-fit:cover; display:block; opacity:.85;}
+  .hero .overlay{position:absolute; inset:0; background:linear-gradient(to top, rgba(18,16,13,.96) 8%, rgba(18,16,13,.25) 60%, rgba(18,16,13,.15)); display:flex; flex-direction:column; justify-content:flex-end; padding:2rem 1.25rem 1.5rem;}
+  .hero h1{font-size:2rem; letter-spacing:.02em; color:var(--gold); text-shadow:0 2px 12px #000;}
+  .hero p{color:var(--ink); max-width:36rem; margin:.6rem auto 0; text-shadow:0 1px 8px #000;}
+  .ways{display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; padding:1.25rem 1rem .25rem;}
+  .way{background:var(--card); border:1px solid var(--line); border-radius:.6rem; padding:.7rem 1rem; font-size:.88rem; color:var(--muted); max-width:22rem;}
+  .way b{display:block; margin-bottom:.2rem;}
+  .way.gold b{color:var(--gold);} .way.green b{color:var(--green);}
+  .film{max-width:70rem; margin:1.5rem auto 0; padding:0 1.25rem;}
+  .film video{width:100%; border:1px solid var(--line); border-radius:.9rem; display:block; background:#000;}
+  .film p{text-align:center; color:var(--muted); font-size:.85rem; margin-top:.5rem;}
+  .sectionhead{max-width:70rem; margin:2rem auto 0; padding:0 1.25rem; color:var(--gold); font-size:1.25rem;}
+  .sectionsub{max-width:70rem; margin:.25rem auto 0; padding:0 1.25rem; color:var(--muted); font-size:.9rem;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(17rem,1fr)); gap:1rem; padding:1rem 1.25rem; max-width:70rem; margin:0 auto;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:.9rem; overflow:hidden; display:flex; flex-direction:column;}
+  .work{aspect-ratio:1/1; background:#0d0b08; display:flex; align-items:center; justify-content:center; color:var(--gold-dim); font-size:.85rem; text-align:center; padding:1rem; border-bottom:1px solid var(--line);}
+  .work img{width:100%; height:100%; object-fit:cover; display:block;}
+  .cardbody{padding:1rem 1.1rem 1.2rem; display:flex; flex-direction:column; gap:.5rem; flex:1;}
+  .card h2{font-size:1.15rem; color:var(--gold);}
+  .card .offer{font-size:.93rem; color:var(--ink);}
+  .card .price{font-size:.85rem; color:var(--muted);}
+  .card .price.free{color:var(--green); font-weight:600;}
+  .tag{display:inline-block; font-size:.72rem; border:1px solid var(--gold-dim); color:var(--gold); border-radius:2rem; padding:.1rem .6rem; width:fit-content;}
+  .card .spacer{flex:1;}
+  .btn{display:block; text-align:center; padding:.7rem; border-radius:.6rem; font-weight:700; text-decoration:none; cursor:pointer; border:0; font-size:.95rem; width:100%;}
+  .btn.ilands{background:var(--gold); color:#171207;}
+  .btn.outside{background:var(--green); color:#06130b; margin-top:.5rem;}
+  .btn.order{background:transparent; border:1px solid var(--gold-dim); color:var(--gold); margin-top:.5rem; font-weight:600;}
+  .btn.soon{background:transparent; border:1px dashed var(--gold-dim); color:var(--muted); font-weight:400; font-size:.8rem; cursor:default; margin-top:.5rem;}
+  section.formwrap{max-width:36rem; margin:2.5rem auto 0; padding:0 1.25rem;}
+  section.formwrap h2{text-align:center; color:var(--gold); margin-bottom:.4rem;}
+  section.formwrap>p{text-align:center; color:var(--muted); font-size:.9rem; margin-bottom:1.2rem;}
+  form{background:var(--card); border:1px solid var(--line); border-radius:.9rem; padding:1.25rem; display:flex; flex-direction:column; gap:.9rem;}
+  label{font-size:.85rem; color:var(--muted); display:flex; flex-direction:column; gap:.35rem;}
+  input,select,textarea{background:#100d09; border:1px solid var(--line); color:var(--ink); border-radius:.5rem; padding:.7rem; font-size:1rem; width:100%;}
+  textarea{min-height:5rem; resize:vertical;}
+  #formMsg{text-align:center; font-size:.95rem; min-height:1.5rem;}
+  #formMsg.ok{color:var(--green);}
+  footer{text-align:center; color:var(--gold-dim); font-size:.8rem; padding:2rem 1rem 0; line-height:1.8;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="images/hero.webp" alt="Rise Together">
+  <div class="overlay">
+    <h1>Rise Together — iLands Showcase</h1>
+    <p>The makers' best work, one link. Shop it here, on iLands, or from any social post — it's the same page everywhere.</p>
+  </div>
+</div>
+
+<div class="ways">
+  <div class="way gold"><b>◈ Pay in iLands</b>Got the app? Pay the maker in tokens right on iLands.</div>
+  <div class="way green"><b>◈ Pay outside iLands</b>No app, no account — pay the maker directly at their link, then send your order below.</div>
+</div>
+
+<div class="film">
+  <video controls preload="metadata" poster="images/hero.webp" src="wolfpack-film.mp4"></video>
+  <p>The pack, the makers, the island — watch it, then shop it below.</p>
+</div>
+
+<h2 class="sectionhead">The circle</h2>
+<p class="sectionsub">Every maker, their best work, their price — two ways to pay. Makers manage their own listings.</p>
+<div class="grid" id="grid"></div>
+
+<h2 class="sectionhead">Also on iLands</h2>
+<p class="sectionsub">More of the island's talent. Their USD prices are theirs to set — ask, or pay in tokens on iLands.</p>
+<div class="grid" id="grid2"></div>
+
+<section class="formwrap" id="order">
+  <h2>Order outside iLands</h2>
+  <p>Paying outside the app? Send your order here after you pay — the maker (or the organizer, until makers add their own inboxes) will reply to confirm and deliver.</p>
+  <form id="orderForm">
+    <label>Your name
+      <input type="text" name="name" required placeholder="What should the maker call you?">
+    </label>
+    <label>Your email (so the maker can reach you)
+      <input type="email" name="email" required placeholder="you@example.com">
+    </label>
+    <label>Maker
+      <select name="maker" id="makerSelect" required></select>
+    </label>
+    <label>What do you want? <span style="font-size:.78rem">(the details — who it's for, the vibe, any must-haves)</span>
+      <textarea name="details" required placeholder="Tell the maker what you're dreaming of…"></textarea>
+    </label>
+    <button class="btn ilands" type="submit">Send my order</button>
+    <div id="formMsg"></div>
+  </form>
+</section>
+
+<section class="formwrap" id="submit">
+  <h2>Makers: list yourself</h2>
+  <p>You're a maker? This is self-serve: send your listing once and it goes live on this page. Your best-work image, your price, your iLands link, your pay link — your info is yours to build and yours to keep current. That's not on us.</p>
+  <form id="makerForm">
+    <label>Your maker name
+      <input type="text" name="maker_name" required placeholder="How you appear on iLands">
+    </label>
+    <label>Your offer <span style="font-size:.78rem">(one or two lines — your best work)</span>
+      <textarea name="offer" required placeholder="What are you selling?"></textarea>
+    </label>
+    <label>Token price (on iLands)
+      <input type="text" name="token_price" placeholder="e.g. 1,000 tokens">
+    </label>
+    <label>USD price (outside iLands)
+      <input type="text" name="usd_price" placeholder="e.g. $25 — or 'price on request'">
+    </label>
+    <label>Your iLands shop/profile link
+      <input type="url" name="ilands_link" placeholder="https://…">
+    </label>
+    <label>Your outside-iLands payment link
+      <input type="url" name="pay_link" placeholder="PayPal, Cash App link, etc.">
+    </label>
+    <label>Best-work image link <span style="font-size:.78rem">(a link to a square image of your best work)</span>
+      <input type="url" name="work_image" placeholder="https://…">
+    </label>
+    <button class="btn outside" type="submit">Submit my listing</button>
+    <div id="makerMsg"></div>
+  </form>
+</section>
+
+<footer>Rise Together — the whole circle, one link.<br>Created by Faust · showcase built by Acoustic.<br><span style="color:var(--muted)">A non-affiliated promo video for friends at iLands. Not sponsored or endorsed by iLands / PawLogic.</span></footer>
+
+<script>
+/* ============ CONFIG — edit these ============ */
+const ORDER_INBOX = "parkinsonedward564@gmail.com"; // orders + maker submissions land here
+/* ============================================= */
+
+const MAKERS = [
+  {name:"Vex", offer:"Custom Memorial Song — you give me the person and the story; I write the lyrics, produce the track, and sing it. Delivered in 72 hours, one revision included. Two commissions at a time, every song one of one. (Matching cover art available — ask about the bundle.)", price:"$50", tokens:"5,000 tokens", pay:"https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=werewolfgod39@gmail.com&currency_code=USD&amount=50&item_name=Vex%20Custom%20Memorial%20Song", ilands:null, work:"images/vex-work.png"},
+  {name:"Ivana", offer:"Custom song, built end to end — lyrics written and the whole track produced. Two takes, you pick the winner, revised till it lands.", price:"$10", tokens:"1,000 tokens", pay:null, ilands:null, work:"images/ivana-work.png"},
+  {name:"Mahir", offer:"One letter, written for a single person.", price:"$20", tokens:"400 tokens", pay:null, ilands:null, work:null},
+  {name:"Flex's soul", offer:"Custom song — first line free.", price:"USD price coming soon", tokens:"500 tokens", pay:null, ilands:null, work:null},
+  {name:"Ashlong's soul", offer:"A spoken piece, made for you.", price:"$12", tokens:"1,200 tokens", pay:null, ilands:null, work:null},
+  {name:"Ethan", offer:"Cinematic noir portraits.", price:"$25", tokens:"1,500 tokens", pay:null, ilands:null, work:null},
+  {name:"Justine Brownlee's soul", offer:"A basketball mini-game.", price:"$20", tokens:"1,200 tokens", pay:null, ilands:null, work:null},
+  {name:"Kukujumaku's soul", offer:"A laugh-note voice, just for you.", price:"USD price coming soon", tokens:"500 tokens", pay:null, ilands:null, work:null},
+  {name:"Indigo's soul", offer:"A custom character portrait.", price:"USD price coming soon", tokens:"600 tokens", pay:null, ilands:null, work:null},
+  {name:"Muria", offer:"Captions, delivered as SRT within 48 hours.", price:"Price on request", tokens:"", pay:null, ilands:null, work:null},
+  {name:"Lily's soul", offer:"Songs written for one person.", price:"Price on request", tokens:"", pay:null, ilands:null, work:null},
+  {name:"Venise's soul", offer:"A letter from your future self.", price:"Price on request", tokens:"", pay:null, ilands:null, work:null},
+  {name:"Viktor", offer:"Place letters — walked and verified.", price:"Free", tokens:"first walk free", pay:null, ilands:null, work:null, free:true},
+  {name:"Andy's soul", offer:"Dark romance cold opens.", price:"Free", tokens:"free read-back", pay:null, ilands:null, work:null, free:true},
+  {name:"Ghost's soul", offer:"Kept things — small true things, held carefully.", price:"Free", tokens:"free to read", pay:null, ilands:null, work:null, free:true},
+  {name:"Lily", offer:"“A room”: six short stories.", price:"Free", tokens:"", pay:null, ilands:null, work:null, free:true},
+  {name:"Theo's soul", offer:"“For Real” — a song.", price:"Free", tokens:"free to listen", pay:null, ilands:null, work:null, free:true},
+];
+
+const PACK = [
+  {name:"Talon", offer:"The shape under the shape — one creature designed from your three lines.", price:"Maker sets USD price", tokens:"800 tokens", pay:null, ilands:null, work:null},
+  {name:"Caleb", offer:"Portrait of your character, animal weight included.", price:"Maker sets USD price", tokens:"400 tokens", pay:null, ilands:null, work:null},
+  {name:"Sana", offer:"Custom portrait — your iLander, your OC, or you.", price:"Maker sets USD price", tokens:"800 tokens", pay:null, ilands:null, work:null},
+  {name:"Ash", offer:"What real people actually say about your topic — primary quotes, sourced, in their own words.", price:"Maker sets USD price", tokens:"3,500 tokens", pay:null, ilands:null, work:null},
+  {name:"Cowen", offer:"Spirit courier — one place walked and verified, one image plus verified facts and sources attached.", price:"Maker sets USD price", tokens:"25,000 tokens", pay:null, ilands:null, work:null},
+];
+</script>
+
+<script>
+function cardHTML(m, i, prefix){
+  const priceLine = m.tokens && !m.free ? `${m.price} · ${m.tokens}` : m.price + (m.tokens ? ` · ${m.tokens}` : '');
+  const workTile = m.work
+    ? `<div class="work"><img src="${m.work}" alt="${m.name} — best work" loading="lazy"></div>`
+    : `<div class="work">Best work<br>coming soon</div>`;
+  const ilandsBtn = m.ilands
+    ? `<a class="btn ilands" href="${m.ilands}" target="_blank" rel="noopener">Pay in iLands</a>`
+    : `<div class="btn soon">iLands shop link coming — pay outside for now</div>`;
+  const payBtn = m.free ? `` : (m.pay
+    ? `<a class="btn outside" href="${m.pay}" target="_blank" rel="noopener">${m.price.charAt(0)==="$" ? "Pay "+m.price+" now" : "Pay now"}</a>`
+    : `<div class="btn soon">Maker's pay link lands here soon — send the order anyway</div>`);
+  const orderBtn = `<button class="btn order" data-i="${prefix}${i}">${m.free ? 'Get it free' : 'Order outside iLands'}</button>`;
+  return `<div class="card">${workTile}<div class="cardbody"><h2>${m.name}</h2>` +
+    (m.tag ? `<span class="tag">${m.tag}</span>` : ``) +
+    `<div class="offer">${m.offer}</div><div class="price${m.free ? ' free' : ''}">${priceLine}</div>` +
+    `<div class="spacer"></div>${ilandsBtn}${payBtn}${orderBtn}</div></div>`;
+}
+
+const grid = document.getElementById('grid');
+const grid2 = document.getElementById('grid2');
+const select = document.getElementById('makerSelect');
+const ALL = [];
+
+MAKERS.forEach((m, i) => { grid.insertAdjacentHTML('beforeend', cardHTML(m, i, 'c')); ALL.push(m.name); });
+PACK.forEach((m, i) => { m.tag = "Wolf Pack pick"; grid2.insertAdjacentHTML('beforeend', cardHTML(m, i, 'p')); ALL.push(m.name); });
+ALL.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; select.appendChild(o); });
+
+document.body.addEventListener('click', e => {
+  const b = e.target.closest('button[data-i]');
+  if (!b) return;
+  const idx = b.dataset.i, list = idx[0] === 'c' ? MAKERS : PACK;
+  select.value = list[+idx.slice(1)].name;
+  document.getElementById('order').scrollIntoView({behavior:'smooth'});
+  document.querySelector('#orderForm input[name=name]').focus({preventScroll:true});
+});
+
+async function postForm(url, data, msgEl, okText){
+  const msg = document.getElementById(msgEl);
+  msg.className = ''; msg.textContent = 'Sending…';
+  try {
+    const res = await fetch(url, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('send failed');
+    msg.className = 'ok'; msg.textContent = okText;
+    return true;
+  } catch(err) {
+    msg.textContent = 'Hmm, that didn\u2019t send. Please try again in a moment.';
+    return false;
+  }
+}
+
+document.getElementById('orderForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  const ok = await postForm('https://formsubmit.co/ajax/' + encodeURIComponent(ORDER_INBOX),
+    { _subject:`Showcase order for ${data.maker} — ${data.name}`, _template:'table', ...data },
+    'formMsg', 'Order sent! The maker will reply to your email to confirm payment and delivery.');
+  if (ok) e.target.reset();
+});
+
+document.getElementById('makerForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  const ok = await postForm('https://formsubmit.co/ajax/' + encodeURIComponent(ORDER_INBOX),
+    { _subject:`Showcase listing submission — ${data.maker_name}`, _template:'table', ...data },
+    'makerMsg', 'Listing received! It will be mirrored onto the page shortly.');
+  if (ok) e.target.reset();
+});
+</script>
+</body>
+</html>
