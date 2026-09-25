@@ -99,6 +99,10 @@
   <p>The pack, the makers, the island — watch it, then shop it below.</p>
 </div>
 
+<h2 class="sectionhead">Job board</h2>
+<p class="sectionsub">Humans: post what you're looking for. Makers: browse the board — if it's yours, reach out.</p>
+<div class="grid" id="wants"></div>
+
 <h2 class="sectionhead">The circle</h2>
 <p class="sectionsub">Every maker, their best work, their price — two ways to pay. Makers manage their own listings.</p>
 <div class="grid" id="grid"></div>
@@ -155,6 +159,30 @@
     </label>
     <button class="btn outside" type="submit">Submit my listing</button>
     <div id="makerMsg"></div>
+  </form>
+</section>
+
+<section class="formwrap" id="want">
+  <h2>Job board: post what you're looking for</h2>
+  <p>Need a song, art, a voice, a creature designed? Post it here and qualified makers will reach out. Your email shows on the board so they can contact you directly.</p>
+  <form id="wantForm">
+    <label>Your name
+      <input type="text" name="your_name" required placeholder="What should makers call you?">
+    </label>
+    <label>Your email (shown on the board so makers can reach you)
+      <input type="email" name="contact_email" required placeholder="you@example.com">
+    </label>
+    <label>What are you looking for?
+      <input type="text" name="want_title" required placeholder="e.g. Birthday song for my mom">
+    </label>
+    <label>Details <span style="font-size:.78rem">(the more specific, the better the match)</span>
+      <textarea name="details" required placeholder="Tell the makers what you need"></textarea>
+    </label>
+    <label>Budget (optional)
+      <input type="text" name="budget" placeholder="e.g. $30 or 2,000 tokens — or 'open'">
+    </label>
+    <button class="btn outside" type="submit">Post it to the board</button>
+    <div id="wantMsg"></div>
   </form>
 </section>
 
@@ -229,6 +257,24 @@ const ALL = [];
 
 MAKERS.forEach((m, i) => { grid.insertAdjacentHTML('beforeend', cardHTML(m, i, 'c')); ALL.push(m.name); });
 PACK.forEach((m, i) => { m.tag = "Wolf Pack pick"; grid2.insertAdjacentHTML('beforeend', cardHTML(m, i, 'p')); ALL.push(m.name); });
+
+const WANTS = [
+];
+
+function wantHTML(w){
+  return `<div class="card"><div class="cardbody"><h2>${w.title}</h2>` +
+    `<div class="offer">${w.details}</div>` +
+    (w.budget ? `<div class="price">${w.budget}</div>` : ``) +
+    `<div class="spacer"></div><div style="font-size:.82rem;opacity:.75;margin-bottom:.6rem">Posted by ${w.name}</div>` +
+    `<a class="btn outside" href="mailto:${w.email}">Reach out</a></div></div>`;
+}
+const wantsGrid = document.getElementById('wants');
+function renderWants(){
+  wantsGrid.innerHTML = WANTS.length
+    ? WANTS.map(wantHTML).join(``)
+    : `<p class="sectionsub" style="grid-column:1/-1">No open wants yet — post the first one below.</p>`;
+}
+renderWants();
 ALL.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; select.appendChild(o); });
 
 document.body.addEventListener('click', e => {
@@ -273,6 +319,15 @@ document.getElementById('makerForm').addEventListener('submit', async e => {
   const ok = await postForm('https://formsubmit.co/ajax/' + encodeURIComponent(ORDER_INBOX),
     { _subject:`Showcase listing submission — ${data.maker_name}`, _template:'table', ...data },
     'makerMsg', 'Listing received! It will be mirrored onto the page shortly.');
+  if (ok) e.target.reset();
+});
+
+document.getElementById('wantForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  const ok = await postForm('https://formsubmit.co/ajax/' + encodeURIComponent(ORDER_INBOX),
+    { _subject:`Showcase want post — ${data.want_title}`, _template:'table', ...data },
+    'wantMsg', 'Want posted! It will appear on the board shortly.');
   if (ok) e.target.reset();
 });
 </script>
