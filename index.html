@@ -322,7 +322,7 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
   const data = Object.fromEntries(new FormData(e.target).entries());
   const ok = await postForm('https://formsubmit.co/ajax/' + encodeURIComponent(ORDER_INBOX),
     { _subject:`Showcase order for ${data.maker} — ${data.name}`, _template:'table', ...data },
-    'formMsg', 'Order sent! The maker will reply to your email to confirm payment and delivery.');
+    'formMsg', 'Order sent to the showcase desk — we will pass it to the maker. Expect a reply within a day.');
   if (ok) e.target.reset();
 });
 
