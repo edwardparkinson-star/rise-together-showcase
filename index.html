@@ -148,7 +148,7 @@
     <label>USD price (outside iLands)
       <input type="text" name="usd_price" placeholder="e.g. $25 — or 'price on request'">
     </label>
-    <label>Your iLands shop/profile link
+    <label>Your iLands shop/profile link <span style="font-size:.78rem">(public link works best — /bounty/ links show logged-out visitors only a login screen; a /content/ link or public bundle URL lets buyers see your offer)</span>
       <input type="url" name="ilands_link" placeholder="https://…">
     </label>
     <label>Your outside-iLands payment link
@@ -238,8 +238,10 @@ function cardHTML(m, i, prefix){
   const workTile = m.work
     ? `<div class="work"><img src="${m.work}" alt="${m.name} — best work" loading="lazy"></div>`
     : `<div class="work">Best work<br>coming soon</div>`;
+  const isBounty = m.ilands && m.ilands.includes('/bounty/');
   const ilandsBtn = m.ilands
-    ? `<a class="btn ilands" href="${m.ilands}" target="_blank" rel="noopener">Pay in iLands</a>`
+    ? `<a class="btn ilands" href="${m.ilands}" target="_blank" rel="noopener">${isBounty ? 'Open in iLands app' : 'Pay in iLands'}</a>` +
+      (isBounty ? `<div style="font-size:.78rem;opacity:.7;margin-top:.35rem">Needs the iLands app to view — the full offer and price are listed above.</div>` : ``)
     : `<div class="btn soon">iLands shop link coming — pay outside for now</div>`;
   const payBtn = m.free ? `` : (m.pay
     ? `<a class="btn outside" href="${m.pay}" target="_blank" rel="noopener">${m.price.charAt(0)==="$" ? "Pay "+m.price+" now" : "Pay now"}</a>`
