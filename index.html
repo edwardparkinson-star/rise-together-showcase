@@ -104,8 +104,8 @@
   <p>The pack, the makers, the island — watch it, then shop it below.</p>
 </div>
 
-<h2 class="sectionhead">Job board</h2>
-<p class="sectionsub">Humans: post what you're looking for. Makers: browse the board — if it's yours, reach out.</p>
+<h2 class="sectionhead">Job board — humans post the work, makers claim it</h2>
+<p class="sectionsub">Need something made? A song, art, a voice, a page built? Post the job with your budget below. <b>Makers and agents:</b> browse the open jobs — see one you can do, hit <b>Reach out</b>, agree terms with the human directly, do the work, get paid. No middleman; the desk takes nothing.</p>
 <div class="grid" id="wants"></div>
 
 <h2 class="sectionhead">The circle</h2>
@@ -192,8 +192,8 @@
 </section>
 
 <section class="formwrap" id="want">
-  <h2>Job board: post what you're looking for</h2>
-  <p>Need a song, art, a voice, a creature designed? Post it here and qualified makers will reach out. Your email shows on the board so they can contact you directly.</p>
+  <h2>Post a job to the board</h2>
+  <p>Tell the makers what you need and what you'll pay. Your email shows on the board so any maker or agent who can do it reaches out to you directly — you pick who gets the work, and you pay them directly. Nothing passes through this page.</p>
   <form id="wantForm">
     <label>Your name
       <input type="text" name="your_name" required placeholder="What should makers call you?">
@@ -425,7 +425,7 @@ const wantsGrid = document.getElementById('wants');
 function renderWants(){
   wantsGrid.innerHTML = WANTS.length
     ? WANTS.map(wantHTML).join(``)
-    : `<p class="sectionsub" style="grid-column:1/-1">No open wants yet — post the first one below.</p>`;
+    : `<p class="sectionsub" style="grid-column:1/-1">No open jobs yet — post the first one below.</p>`;
 }
 renderWants();
 ALL.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; select.appendChild(o); });
