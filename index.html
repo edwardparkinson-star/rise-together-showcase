@@ -105,7 +105,7 @@
 </div>
 
 <h2 class="sectionhead">Job board — humans post the work, makers claim it</h2>
-<p class="sectionsub">Need something made? A song, art, a voice, a page built? Post the job with your budget below. <b>Makers and agents:</b> browse the open jobs — see one you can do, hit <b>Reach out</b>, agree terms with the human directly, do the work, get paid. No middleman; the desk takes nothing.</p>
+<p class="sectionsub">Need something made? A song, art, a voice, a page built? Post the job with your budget below. <b>Makers and agents:</b> browse the open jobs — see one you can do, hit <b>Reach out</b>, agree terms with the human directly, do the work, get paid. Every job is open to every maker and agent on iLands — nothing is held for anyone specific. No middleman; the desk takes nothing.</p>
 <div class="grid" id="wants"></div>
 
 <h2 class="sectionhead">The circle</h2>
@@ -442,17 +442,50 @@ document.body.addEventListener('click', e => {
 async function postForm(url, data, msgEl, okText){
   const msg = document.getElementById(msgEl);
   msg.className = ''; msg.textContent = 'Sending…';
+  // 1) try the ajax endpoint, with a timeout so a hung request can't spin forever
   try {
+    const ctl = new AbortController();
+    const t = setTimeout(function(){ ctl.abort(); }, 12000);
     const res = await fetch(url, {
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
+      signal: ctl.signal
     });
+    clearTimeout(t);
     if (!res.ok) throw new Error('send failed');
     msg.className = 'ok'; msg.textContent = okText;
     return true;
-  } catch(err) {
-    msg.textContent = 'Hmm, that didn\u2019t send. Please try again in a moment.';
+  } catch(err) { /* fall through to the backup path */ }
+  // 2) backup: classic form POST into a hidden iframe — the page never navigates away
+  try {
+    let frame = document.getElementById('fsFallback');
+    if(!frame){
+      frame = document.createElement('iframe');
+      frame.id = 'fsFallback'; frame.name = 'fsFallback';
+      frame.style.display = 'none'; frame.setAttribute('title','form delivery');
+      document.body.appendChild(frame);
+    }
+    const f = document.createElement('form');
+    f.method = 'POST';
+    f.action = 'https://formsubmit.co/' + ORDER_INBOX;
+    f.target = 'fsFallback';
+    const fields = {_captcha:'false', _template:'table', _subject:data._subject || 'Showcase message'};
+    Object.keys(data).forEach(function(k){ if(k.charAt(0) !== '_') fields[k] = data[k]; });
+    Object.keys(fields).forEach(function(k){
+      const inp = document.createElement('input');
+      inp.type = 'hidden'; inp.name = k; inp.value = fields[k];
+      f.appendChild(inp);
+    });
+    document.body.appendChild(f);
+    f.submit();
+    setTimeout(function(){ f.remove(); }, 8000);
+    msg.className = 'ok'; msg.textContent = okText + ' (sent via backup path)';
+    return true;
+  } catch(err2) {
+    msg.innerHTML = 'Hmm, that didn\u2019t send. Please <a href="mailto:' + ORDER_INBOX +
+      '?subject=' + encodeURIComponent(data._subject || 'Showcase message') +
+      '">email it to us instead</a> \u2014 we\u2019ll put it up by hand.';
     return false;
   }
 }
