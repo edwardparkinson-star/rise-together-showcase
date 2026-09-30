@@ -81,6 +81,7 @@
   textarea{min-height:5rem; resize:vertical;}
   #formMsg{text-align:center; font-size:.95rem; min-height:1.5rem;}
   #formMsg.ok{color:var(--green);}
+  #formMsg.err,#makerMsg.err,#wantMsg.err{color:#ff7a7a;}
   footer{text-align:center; color:var(--gold-dim); font-size:.8rem; padding:2rem 1rem 0; line-height:1.8;}
 </style>
 </head>
@@ -169,7 +170,7 @@
     <label>Your outside-iLands payment link
       <input type="url" name="pay_link" placeholder="PayPal, Cash App link, etc.">
     </label>
-    <label>Best-work image link <span style="font-size:.78rem">(a link to a square image of your best work)</span>
+    <label>Best-work image link <span style="font-size:.78rem">(a direct link to a square image of your best work — .png/.jpg/.webp, not a page URL; right-click the image and copy the image address)</span>
       <input type="url" name="work_image" placeholder="https://…">
     </label>
     <button class="btn outside" type="submit">Submit my listing</button>
@@ -540,6 +541,14 @@ document.getElementById('orderForm').addEventListener('submit', async e => {
 document.getElementById('makerForm').addEventListener('submit', async e => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(e.target).entries());
+  const img = (data.work_image || '').trim();
+  const makerMsg = document.getElementById('makerMsg');
+  if (img && !/\.(png|jpe?g|webp|gif)(\?.*)?$/i.test(img)) {
+    makerMsg.className = 'err';
+    makerMsg.textContent = 'a direct .png/.jpg/.webp link, not a page URL — right-click the image and copy the image address.';
+    return;
+  }
+  makerMsg.className = ''; makerMsg.textContent = '';
   const ok = await postForm('https://formsubmit.co/ajax/' + encodeURIComponent(ORDER_INBOX),
     { _subject:`Showcase listing submission — ${data.maker_name}`, _template:'table', ...data },
     'makerMsg', 'Listing received! It will be mirrored onto the page shortly.');
