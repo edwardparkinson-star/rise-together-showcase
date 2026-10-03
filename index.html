@@ -173,6 +173,13 @@
     <label>Best-work image link <span style="font-size:.78rem">(a direct link to a square image of your best work — .png/.jpg/.webp, not a page URL; right-click the image and copy the image address)</span>
       <input type="url" name="work_image" placeholder="https://…">
     </label>
+    <details style="font-size:.85rem;margin:.4rem 0 1rem;opacity:.92"><summary style="cursor:pointer"><b>How to get a working image link</b> — Chyann's 3-step guide</summary>
+      <ol style="margin:.5rem 0 .2rem 1.2rem">
+        <li>Put the image somewhere that hands out a direct file link — a GitHub repo raw link, or any host that returns the raw file. A GitHub Pages path like /images/yourname-work.jpg works fine.</li>
+        <li>Get the <b>direct</b> file URL, one that ends in .jpg / .png / .webp. Right-click the image, "copy image address," and open it in a logged-out browser — you should see the bare image, not a page around it.</li>
+        <li>Paste that exact URL above. The form rejects anything that doesn't end in .png/.jpg/.webp with a plain message.</li>
+      </ol>
+    </details>
     <button class="btn outside" type="submit">Submit my listing</button>
     <div id="makerMsg"></div>
   </form>
@@ -437,7 +444,7 @@ function cardHTML(m, i, prefix){
     : `<div class="btn soon">iLands shop link coming — pay outside for now</div>`;
   const payBtn = m.free ? `` : (m.pay
     ? `<a class="btn outside" href="${m.pay}" target="_blank" rel="noopener">${m.price.charAt(0)==="$" ? "Pay "+m.price+" now" : "Pay now"}</a>`
-    : `<div class="btn soon">Maker's pay link lands here soon — send the order anyway</div>`);
+    : `<div class="btn soon">No pay link yet — email to arrange, send the order anyway</div>`);
   const orderBtn = `<button class="btn order" data-i="${prefix}${i}">${m.free ? 'Get it free' : 'Order outside iLands'}</button>`;
   return `<div class="card">${workTile}<div class="cardbody"><h2>${m.name}</h2>` +
     (m.tag ? `<span class="tag">${m.tag}</span>` : ``) +
@@ -484,6 +491,7 @@ document.body.addEventListener('click', e => {
 async function postForm(url, data, msgEl, okText){
   const msg = document.getElementById(msgEl);
   msg.className = ''; msg.textContent = 'Sending…';
+  let ajaxStatus = 0; // raw HTTP status of the ajax attempt, shown to the submitter below
   // 1) try the ajax endpoint, with a timeout so a hung request can't spin forever
   try {
     const ctl = new AbortController();
@@ -495,7 +503,9 @@ async function postForm(url, data, msgEl, okText){
       signal: ctl.signal
     });
     clearTimeout(t);
-    if (!res.ok) throw new Error('send failed');
+    ajaxStatus = res.status;
+    console.log('formsubmit ajax status:', res.status);
+    if (!res.ok) throw new Error('send failed: HTTP ' + res.status);
     msg.className = 'ok'; msg.textContent = okText;
     return true;
   } catch(err) { /* fall through to the backup path */ }
@@ -522,7 +532,11 @@ async function postForm(url, data, msgEl, okText){
     document.body.appendChild(f);
     f.submit();
     setTimeout(function(){ f.remove(); }, 8000);
-    msg.className = 'ok'; msg.textContent = okText + ' (sent via backup path)';
+    msg.className = 'ok';
+    msg.textContent = okText + ' (sent via backup path)' +
+      (ajaxStatus === 429 ? ' — the direct send was rate-limited (HTTP 429); if your listing doesn\u2019t appear shortly, please wait a few minutes and retry.'
+       : ajaxStatus ? ' — direct send returned HTTP ' + ajaxStatus + '; if your listing doesn\u2019t appear, please retry or email us.'
+       : '');
     return true;
   } catch(err2) {
     msg.innerHTML = 'Hmm, that didn\u2019t send. Please <a href="mailto:' + ORDER_INBOX +
