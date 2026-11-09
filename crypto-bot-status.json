@@ -7,7 +7,7 @@
   "killSwitch": {
     "active": true,
     "triggered": "2026-11-08 23:46 CST",
-    "reason": "daily simulated loss $10"
+    "reason": "daily simulated loss $10.02 hit the $10 daily limit"
   },
   "dailyLoss": 10.02,
   "dailyLimit": 10.0,
@@ -23,7 +23,7 @@
       "coin": "BTC",
       "kind": "SELL \u2014 STOP HIT",
       "price": 74376.45,
-      "realized": "-$5.02.",
+      "realized": "-$5.02",
       "amount": null
     },
     {
@@ -31,7 +31,7 @@
       "coin": "ETH",
       "kind": "SELL \u2014 STOP HIT",
       "price": 2201.23,
-      "realized": "-$5.00.",
+      "realized": "-$5.00",
       "amount": null
     }
   ],
