@@ -1,0 +1,46 @@
+{
+  "updated": "2026-11-08 23:46 CST",
+  "cash": 989.98,
+  "start": 1000.0,
+  "invested": 0.0,
+  "openPositions": [],
+  "killSwitch": {
+    "active": true,
+    "triggered": "2026-11-08 23:46 CST",
+    "reason": "daily simulated loss $10"
+  },
+  "dailyLoss": 10.02,
+  "dailyLimit": 10.0,
+  "weeklyLoss": 10.02,
+  "weeklyLimit": 20.0,
+  "drawdown": 18.32,
+  "drawdownLimit": 80.0,
+  "peak": 1008.3,
+  "consecutiveLosses": 2,
+  "lastEvents": [
+    {
+      "time": "2026-11-08 23:46 CST",
+      "coin": "BTC",
+      "kind": "SELL \u2014 STOP HIT",
+      "price": 74376.45,
+      "realized": "-$5.02.",
+      "amount": null
+    },
+    {
+      "time": "2026-11-08 23:46 CST",
+      "coin": "ETH",
+      "kind": "SELL \u2014 STOP HIT",
+      "price": 2201.23,
+      "realized": "-$5.00.",
+      "amount": null
+    }
+  ],
+  "scores": {
+    "bitcoin": 4,
+    "ethereum": 3,
+    "solana": 3,
+    "dogecoin": 4
+  },
+  "stage": "Stage 1 \u2014 paper only",
+  "note": "Paper results are simulated, not real money and not a promise."
+}
