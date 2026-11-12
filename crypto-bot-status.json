@@ -5,11 +5,11 @@
   "invested": 0.0,
   "openPositions": [],
   "killSwitch": {
-    "active": true,
-    "triggered": "2026-11-08 23:46 CST",
-    "reason": "daily simulated loss $10.02 hit the $10 daily limit"
+    "active": false,
+    "triggered": null,
+    "reason": "resumed 2026-11-12 03:46 CST on Edward's word (\"restart as-is\")"
   },
-  "dailyLoss": 10.02,
+  "dailyLoss": 0.0,
   "dailyLimit": 10.0,
   "weeklyLoss": 10.02,
   "weeklyLimit": 20.0,
@@ -42,5 +42,7 @@
     "dogecoin": 3
   },
   "stage": "Stage 1 \u2014 paper only",
-  "note": "Paper results are simulated, not real money and not a promise."
+  "note": "Paper results are simulated, not real money and not a promise.",
+  "resetUrl": "https://webhook.site/69c99a9b-2e7e-49b4-84ff-d55ec385ade8",
+  "resetUrlExpires": "2026-11-19 09:47:03"
 }
