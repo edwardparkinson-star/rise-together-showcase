@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-26 23:46 CST",
+  "updated": "2026-11-27 07:46 CST",
   "cash": 989.98,
   "start": 1000.0,
   "invested": 0.0,
@@ -39,7 +39,7 @@
     "dogecoin": 6,
     "solana": 6,
     "bitcoin": 6,
-    "ethereum": 6
+    "ethereum": 5
   },
   "stage": "Stage 1 \u2014 paper only",
   "note": "Paper results are simulated, not real money and not a promise.",
